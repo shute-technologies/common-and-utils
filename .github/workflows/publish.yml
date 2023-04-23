@@ -20,19 +20,15 @@ jobs:
         env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
       - name: Install NPM Packages
-        run: 
-          cd Source
-          npm install
+        run: npm install
       - name: Building Typescript
         uses: FuLagann/tsc-build-push@v1
         with:
           user-name: "Cristian F. Shute"
           user-email: "chris_fs313@hotmail.com"
           message: "Automatically built unbuilt typescript"
-          directories: ./Source
+          directories: ./
       - name: Publish to NPM
-        run: 
-          cd Source
-          npm publish --access public
+        run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
