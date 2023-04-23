@@ -43,7 +43,7 @@ export class OFHelpers {
     return wasDate ? new Date(cloned) : cloned;
   }
 
-  private static cloneIterate(objIterate) {
+  private static cloneIterate(objIterate: Object) {
     if (objIterate) {
       Object.entries(objIterate).forEach(entry => {
         const key = entry[0];

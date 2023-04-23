@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "sourceMap": true,
+    "declaration": true,
+    "outDir": "./lib",
+    "target": "es2017",
+    "allowJs": true,
+    "plugins": [
+      { 
+        "name": "typescript-tslint-plugin",
+        "alwaysShowRuleFailuresAsWarnings": false,
+        "ignoreDefinitionFiles": true,
+        "configFile": "../tslint.json",
+        "suppressWhileTypeErrorsPresent": false
+      }
+    ],
+    "moduleResolution": "node",
+    "baseUrl": "./src",
+    "paths": {
+      "@framework": ["shute-technologies/modules/framework/index.ts"],
+      "@common": ["shute-technologies/modules/common/index.ts"]
+    },
+  },
+  "include": [
+    "./src/shute-technologies/modules",
+    "./index.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    ".vscode",
+    "./src/shute-technologies/modules/framework/index.ts"
+  ]
+}
