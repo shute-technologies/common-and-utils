@@ -18,8 +18,8 @@
     "moduleResolution": "node",
     "baseUrl": "./src",
     "paths": {
-      "@framework": ["shute-technologies/modules/framework/index.ts"],
-      "@common": ["shute-technologies/modules/common/index.ts"]
+      "@framework": ["src/shute-technologies/modules/framework/index.ts"],
+      "@common": ["src/shute-technologies/modules/common/index.ts"]
     },
   },
   "include": [
