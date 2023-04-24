@@ -8,7 +8,7 @@ interface IPPDetails {
   hasNextParameter: boolean;
 }
 
-export class OFHelpers {
+export class STHelpers {
 
   static callIn(time: number, functionCallback: SimpleCallback, args?) {
     return setTimeout(
@@ -37,7 +37,7 @@ export class OFHelpers {
 
     /* istanbul ignore else */
     if (!wasDate) {
-      OFHelpers.cloneIterate(cloned);
+      STHelpers.cloneIterate(cloned);
     }
 
     return wasDate ? new Date(cloned) : cloned;
@@ -49,7 +49,7 @@ export class OFHelpers {
         const key = entry[0];
 
         if (typeof objIterate[key] === 'object') {
-          OFHelpers.cloneIterate(objIterate[key]);
+          STHelpers.cloneIterate(objIterate[key]);
         } else {
           if (STUtils.isStringActuallyDateRepresentation(objIterate[key])) {
             objIterate[key] = new Date(objIterate[key]);
@@ -77,7 +77,7 @@ export class OFHelpers {
       if (!STUtils.isNullOrEmpty(val)) {
         path = path.replace(`{${index}}`, val);
       } else {
-        path = OFHelpers.removeEmptyParameter(path, index);
+        path = STHelpers.removeEmptyParameter(path, index);
       }
     });
 
@@ -91,9 +91,9 @@ export class OFHelpers {
 
   static removeEmptyParameter(path: string, index: number) {
     /* istanbul ignore else */
-    if (OFHelpers.isParameterProperty(path, index)) {
-      const paramPropDetails = OFHelpers.getParameterPropertyDetails(path, index);
-      path = OFHelpers.removeParameterPropOfPath(path, paramPropDetails);
+    if (STHelpers.isParameterProperty(path, index)) {
+      const paramPropDetails = STHelpers.getParameterPropertyDetails(path, index);
+      path = STHelpers.removeParameterPropOfPath(path, paramPropDetails);
     }
 
     return path;
