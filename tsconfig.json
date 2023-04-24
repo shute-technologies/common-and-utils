@@ -16,11 +16,7 @@
       }
     ],
     "moduleResolution": "node",
-    "baseUrl": "./src",
-    "paths": {
-      "@framework": ["src/shute-technologies/modules/framework/index.ts"],
-      "@common": ["src/shute-technologies/modules/common/index.ts"]
-    },
+    "baseUrl": "./src"
   },
   "include": [
     "./index.ts"
