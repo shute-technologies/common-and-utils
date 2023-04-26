@@ -1,6 +1,6 @@
 import { ICallback1, IConstructor } from '../interfaces/stInterfaces';
 import { STEnumHTTPErrorCode } from '../enums/stEnumHttpErrorCode';
-import { Base64Binary } from '@external-libs/base64-binary';
+import { Base64Binary } from '@external-libs-from-st/base64-binary';
 import { ISTDebugConsole } from '../interfaces/stDebugConsole';
 
 export class STUtils {
