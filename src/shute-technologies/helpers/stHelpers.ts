@@ -1,5 +1,5 @@
-import { SimpleCallback } from "../interfaces/stInterfaces";
 import { STUtils } from "../utils/stUtils";
+import { ICallback1 } from '../interfaces/stInterfaces';
 
 interface IPPDetails {
   isFirstParameter: boolean;
@@ -10,11 +10,9 @@ interface IPPDetails {
 
 export class STHelpers {
 
-  static callIn(time: number, functionCallback: SimpleCallback, args?) {
+  static callIn<TArg>(time: number, functionCallback: ICallback1<TArg>, args?: TArg) {
     return setTimeout(
-      (inputArgs?) => {
-        functionCallback(inputArgs);
-      },
+      (inputArgs?) => functionCallback(inputArgs),
       time,
       args
     );

@@ -16,7 +16,10 @@
       }
     ],
     "moduleResolution": "node",
-    "baseUrl": "./src"
+    "baseUrl": "./src",
+    "paths": {
+      "@external-libs/*": ["external-libs/*"]
+    }
   },
   "include": [
     "./index.ts"
