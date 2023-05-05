@@ -18,16 +18,16 @@ export class STLocalStorage {
     localStorage.setItem(uid, data);
   }
 
-  static createTempJSObject(uid: string, data: string): void {
+  static createTempJSObject<TObj extends Object>(uid: string, data: TObj): void {
     localStorage.setItem(uid, JSON.stringify(data));
   }
 
-  static getTempJSObject(uid: string) {
+  static getTempJSObject<TObj extends Object>(uid: string): TObj {
     const resultData = localStorage.getItem(uid);
 
     if (resultData) {
       STLocalStorage.removeData(uid);
-      return JSON.parse(resultData);
+      return JSON.parse(resultData) as TObj;
     }
 
     return null;
