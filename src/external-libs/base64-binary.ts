@@ -32,15 +32,26 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 export class Base64Binary {
-	private static _keyStr : "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-	
-	/* will return a  Uint8Array type */
-	static decodeArrayBuffer (input: string) {
-		const bytes = (input.length/4) * 3;
-		const ab = new ArrayBuffer(bytes);
-		this.decode(input, ab);
-		
+	// Must be an assignment. It used to be declared with ':' (a string-literal *type*), so the
+	// alphabet was never set and every decode threw on `undefined.indexOf`.
+	private static readonly _keyStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+
+	/* will return an ArrayBuffer holding exactly the decoded bytes */
+	static decodeArrayBuffer (input: string): ArrayBuffer {
+		const ab = new ArrayBuffer(Base64Binary.decodedLength(input));
+		Base64Binary.decode(input, ab);
+
 		return ab;
+	}
+
+	/**
+	 * Number of bytes `input` decodes to. Characters outside the alphabet (line breaks, spaces)
+	 * and the trailing '=' padding carry no data, so neither counts.
+	 */
+	static decodedLength (input: string): number {
+		const data = Base64Binary.removePaddingChars(Base64Binary.removePaddingChars(Base64Binary.removeInvalidChars(input)));
+
+		return Math.floor((data.length * 3) / 4);
 	}
 
 	static removePaddingChars (input: string) {
@@ -53,43 +64,47 @@ export class Base64Binary {
 		return input;
 	}
 
-	static decode (input: string, arrayBuffer) {
+	static decode (input: string, arrayBuffer?: ArrayBuffer): Uint8Array {
+		// strip line breaks etc. first, so neither the padding check nor the length sees them
+		input = Base64Binary.removeInvalidChars(input);
 		//get last chars to see if are valid
-		input = this.removePaddingChars(input);
-		input = this.removePaddingChars(input);
+		input = Base64Binary.removePaddingChars(input);
+		input = Base64Binary.removePaddingChars(input);
 
-		const bytes = parseInt(((input.length / 4) * 3).toString(), 10);
-		
-		let uarray;
+		const bytes = Math.floor((input.length * 3) / 4);
+
+		let uarray: Uint8Array;
 		let chr1, chr2, chr3;
 		let enc1, enc2, enc3, enc4;
 		let i = 0;
 		let j = 0;
-		
+
 		if (arrayBuffer)
 			uarray = new Uint8Array(arrayBuffer);
 		else
 			uarray = new Uint8Array(bytes);
-		
-		input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
-		
-		for (i=0; i<bytes; i+=3) {	
+
+		for (i=0; i<bytes; i+=3) {
 			//get the 3 octects in 4 ascii chars
 			enc1 = Base64Binary._keyStr.indexOf(input.charAt(j++));
 			enc2 = Base64Binary._keyStr.indexOf(input.charAt(j++));
 			enc3 = Base64Binary._keyStr.indexOf(input.charAt(j++));
 			enc4 = Base64Binary._keyStr.indexOf(input.charAt(j++));
-	
+
 			chr1 = (enc1 << 2) | (enc2 >> 4);
 			chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
 			chr3 = ((enc3 & 3) << 6) | enc4;
-	
-			uarray[i] = chr1;			
-			if (enc3 != 64) uarray[i+1] = chr2;
-			if (enc4 != 64) uarray[i+2] = chr3;
+
+			// the last group may hold only 1 or 2 bytes: never write past the decoded length
+			uarray[i] = chr1;
+			if (i + 1 < bytes) uarray[i+1] = chr2;
+			if (i + 2 < bytes) uarray[i+2] = chr3;
 		}
-	
-		return uarray;	
+
+		return uarray;
+	}
+
+	private static removeInvalidChars (input: string): string {
+		return input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
 	}
 }
- 
